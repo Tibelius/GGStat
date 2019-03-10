@@ -8,21 +8,29 @@ namespace GGStat
 {
     class Program
     {
+        public readonly static bool DEBUG = true;
+        public static Process process;
+        public static string PROCESS_NAME = "GuiltyGearXrd";
+
         static void Main(string[] args) {
             string[] all = System.Reflection.Assembly.GetEntryAssembly().
                 GetManifestResourceNames();
             foreach (string one in all) {
                 Console.WriteLine(one);
             }
+
+
+            Data.initDB();
+            Process[] processes = new Process[] { };
+            while (processes.Length == 0) {
+                processes = Process.GetProcessesByName(PROCESS_NAME);
+                Console.WriteLine("Finding GuiltyGearXrd process...");
+                System.Threading.Thread.Sleep(2000);
+            }
+            process = processes[0];
             Game game = new Game();
-            int[] players = new int[2] { 0, 0 };
-            do {
-                //Console.Clear();
-                game.refreshAllData();
-                game.vision.FindPlayers(ref players);
-                Console.WriteLine(Game.Character[players[0]] + " VS " + Game.Character[players[1]]);
-                System.Threading.Thread.Sleep(1000);
-            } while (true);
+            Console.Clear();
+            game.Run();
         }
     }
 
