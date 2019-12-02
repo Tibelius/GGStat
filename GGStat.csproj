@@ -1,36 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{55A4BDF0-731B-4C84-8A9C-D1B43AD8D272}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{F90EACA5-4715-45D4-8AB8-FD88257ACC55}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GGStat</RootNamespace>
-    <AssemblyName>GGStat</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ConsoleApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -38,15 +21,24 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>GGStat</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GGStat.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -56,7 +48,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -66,51 +57,192 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV.UI, Version=3.4.3.3016, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\packages\EMGU.CV.3.4.3.3016\lib\net35\Emgu.CV.UI.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Emgu.CV.World, Version=3.4.3.3016, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <HintPath>..\packages\EMGU.CV.3.4.3.3016\lib\net35\Emgu.CV.World.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.110.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.110.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Data.Common, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>packages\System.Data.SQLite.Core.1.0.112.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\System.Xml.Linq.3.5.21022.801\lib\net20\System.Xml.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include=".git\COMMIT_EDITMSG" />
+    <None Include=".git\config" />
+    <None Include=".git\description" />
+    <None Include=".git\FETCH_HEAD" />
+    <None Include=".git\HEAD" />
+    <None Include=".git\hooks\applypatch-msg.sample" />
+    <None Include=".git\hooks\commit-msg.sample" />
+    <None Include=".git\hooks\post-update.sample" />
+    <None Include=".git\hooks\pre-applypatch.sample" />
+    <None Include=".git\hooks\pre-commit.sample" />
+    <None Include=".git\hooks\pre-push.sample" />
+    <None Include=".git\hooks\pre-rebase.sample" />
+    <None Include=".git\hooks\pre-receive.sample" />
+    <None Include=".git\hooks\prepare-commit-msg.sample" />
+    <None Include=".git\hooks\update.sample" />
+    <None Include=".git\index" />
+    <None Include=".git\info\exclude" />
+    <None Include=".git\logs\HEAD" />
+    <None Include=".git\logs\refs\heads\master" />
+    <None Include=".git\logs\refs\remotes\origin\master" />
+    <None Include=".git\objects\02\6df5953d35484281e75615626e65de49a2a3a4" />
+    <None Include=".git\objects\04\e00490c59e64c57f697543d758a718d37d948d" />
+    <None Include=".git\objects\11\0e916943ace91a82e00b3a070a67317561b4f9" />
+    <None Include=".git\objects\11\a6d95a8cc423b74354af202c8fe50883012baa" />
+    <None Include=".git\objects\12\ac86b4ea34a4d96877ee7a40a4111d4241c8b3" />
+    <None Include=".git\objects\14\9e267df9d706c519d5d2fa36a987a81c5dc572" />
+    <None Include=".git\objects\17\11c7099a1eec18f63b8f1773e75e45d3c735f7" />
+    <None Include=".git\objects\1c\fb3584e17e6ab44e6b73370125e5510cea9f3f" />
+    <None Include=".git\objects\1d\00b2bbf80196ea9e9c5d4b31ba8674aa9a2acb" />
+    <None Include=".git\objects\1f\44e6e6dcabcc4b3dd4dde58ef34c8bbc8cc716" />
+    <None Include=".git\objects\1f\f0c423042b46cb1d617b81efb715defbe8054d" />
+    <None Include=".git\objects\25\26484ec35d524d2a787d7bfbfa50dec35d18bd" />
+    <None Include=".git\objects\26\b3e45367dd2fd38e0609b161a0a5c8e8f4cbcd" />
+    <None Include=".git\objects\28\18ae8fc940c167ce05c6e25be8216e9c4b1e9e" />
+    <None Include=".git\objects\28\ddfffe0735e0e6d1cbbc6f54d18c52bc6fc458" />
+    <None Include=".git\objects\2a\f71bfd5276123d24df15d0e79a3dff23739e08" />
+    <None Include=".git\objects\2b\4822ce5fc53030bafb45d0c5e4f1f42f25c795" />
+    <None Include=".git\objects\2c\b1f080efca9a3eddd962e79bb2152ca903af05" />
+    <None Include=".git\objects\2d\76d3ee1a5cc29aa8f6e2ac984b84498bd2322d" />
+    <None Include=".git\objects\31\e45c26db58bf82f753305222c1f00af2a77960" />
+    <None Include=".git\objects\33\781f816f40473844e282a1ea25d42bba0571b6" />
+    <None Include=".git\objects\34\b8388e84d2e4a21555829aca5c18b2c3c8311c" />
+    <None Include=".git\objects\37\e9bc3653e2b4c98cc4e29c3813102ce5c192fa" />
+    <None Include=".git\objects\38\f8eed5557de1776aa88f762bdbd2aab17c6a33" />
+    <None Include=".git\objects\3a\ee2266913f73e8ce087466b81d58680ff080a1" />
+    <None Include=".git\objects\3c\4efe206bd0e7230ad0ae8396a3c883c8207906" />
+    <None Include=".git\objects\42\9168860e9581f80633a0c29c16ada2b5d06dc3" />
+    <None Include=".git\objects\44\247cab0e385f20886a3ba4920759a36e432540" />
+    <None Include=".git\objects\45\6b0ace206067d760e6383b215f858debc806cd" />
+    <None Include=".git\objects\47\86c0500057e2452187238ffce996a0fe2cba40" />
+    <None Include=".git\objects\49\36cc627f0229ec00e2cfd991838477f88a08d0" />
+    <None Include=".git\objects\4c\938229c5c7e1ccce4789bc4fd32b9ac8b8df0e" />
+    <None Include=".git\objects\50\8dee91110b2492fdd5c3c358f3fce666557c47" />
+    <None Include=".git\objects\51\7ae3aa0b394a04cd22d91cd38a9bd3ecb3595e" />
+    <None Include=".git\objects\57\f94c47faefed26d90a82305d02473cf2720e20" />
+    <None Include=".git\objects\5e\2ad6b81c6eac8f2d2290db535578aef20a40fc" />
+    <None Include=".git\objects\62\cf81a725a74f36afced0270e929836d7dce619" />
+    <None Include=".git\objects\63\ef9860665d1665c2c74d108c41b5fbf6066fd5" />
+    <None Include=".git\objects\64\5dfad87d8c194378e01b30de0d5ad2185b3326" />
+    <None Include=".git\objects\66\1cd7e9018bad49dfa1d269b72019cb9f7ff944" />
+    <None Include=".git\objects\67\a5e365d2e9498966e57b566eb4eb846e74ace7" />
+    <None Include=".git\objects\6e\e1e3063e52fc05bf502da6bf2a2ed9c55fa4e1" />
+    <None Include=".git\objects\6f\64b559f40b11298bc5caa7672b45f054147f34" />
+    <None Include=".git\objects\70\63a54fe92520e3bdd218622c97553769c3e54d" />
+    <None Include=".git\objects\71\fb107084e4825cbe3918b2a00193ce517b3065" />
+    <None Include=".git\objects\75\ec6e29b19ebc2f81198b8666010ad959842c75" />
+    <None Include=".git\objects\77\4be228b19a26a23cf4d91fcf93b75a07d0a9c0" />
+    <None Include=".git\objects\7a\5ee4f481c7c78669a398a9ea88a0c9a89e7104" />
+    <None Include=".git\objects\7c\eda69a0a723afb1f558fe6e2372ed57e8184b2" />
+    <None Include=".git\objects\7d\d73df06981ae50632b5e54b6a8eabb59b8901c" />
+    <None Include=".git\objects\81\94d4bcdd3285ce2fd71eb7651ade8226158afc" />
+    <None Include=".git\objects\81\b9de92fe0ecdf2eacca7ceaf391a57de52eca8" />
+    <None Include=".git\objects\84\d86408f9d28f7a82240b1c1e90bd46c52b26aa" />
+    <None Include=".git\objects\85\da912f7d1eb63b41078bf21581bae15c348f9c" />
+    <None Include=".git\objects\86\5ac1c6e326619b1b40fde0dcd4fbb53cf98f59" />
+    <None Include=".git\objects\87\9e7688c65a4bc63a5b9903420595f7928c0433" />
+    <None Include=".git\objects\88\fa4027bda397de6bf19f0940e5dd6026c877f9" />
+    <None Include=".git\objects\8d\9be62a29dd856b2965da183588ca86656cd20e" />
+    <None Include=".git\objects\8f\b6330b85b7f3085c690149204f8c1f911dfe92" />
+    <None Include=".git\objects\91\e3470e1645e6e8d0de6fe9f6b242f366e9a393" />
+    <None Include=".git\objects\93\2c74f1b1903d825ec290abb5a6482494039297" />
+    <None Include=".git\objects\94\da6135be3728ad322f718dd8d40cc780fd1e2b" />
+    <None Include=".git\objects\95\c3bd1d936830ff3542b7fb299048867a89730c" />
+    <None Include=".git\objects\99\34a9cb2bf7e4c320f4fef6641376419b3abc32" />
+    <None Include=".git\objects\99\56531024353f04d40bc1263caf55d5e75b39cf" />
+    <None Include=".git\objects\9a\79f94c49de05f82d3164e0cc060dfefa366bd7" />
+    <None Include=".git\objects\9c\fba907259985f9809d066ff425ff5eb6ebd293" />
+    <None Include=".git\objects\9d\ae96ef05dbcc8d39035b521944e6c0583c014e" />
+    <None Include=".git\objects\a6\c16dd5bb98ba7e39808f1989f0dc884c9728e9" />
+    <None Include=".git\objects\a6\ffcdfa355ebe0f3f5fdc97b207fa2df391414c" />
+    <None Include=".git\objects\a7\7b294c3a69599335e99aa67d07f9cc44ab0937" />
+    <None Include=".git\objects\a7\da65efcef48ed7b9812209688d25f878402434" />
+    <None Include=".git\objects\a9\8e543204b5a82b6a93cb0e5983444076e98d63" />
+    <None Include=".git\objects\a9\96ac1c3d51161cf1b2c831ff347869a62b9ca2" />
+    <None Include=".git\objects\ac\382304d0433722a1b56e975f201c8164ffe8ce" />
+    <None Include=".git\objects\b2\8b96277dd3d9ac373a826767b8b9aaa884a5d4" />
+    <None Include=".git\objects\b5\25046c859e6a30f9e4b2ed440d5cf5752f3c23" />
+    <None Include=".git\objects\bd\13d1d2c601826d81ca04fe82c841e3c7c54e1d" />
+    <None Include=".git\objects\bd\abfa7b7d1ffb3f81d6643e1381c41496747998" />
+    <None Include=".git\objects\c1\a9bd380f33776b2ffa31943b3835339b901c43" />
+    <None Include=".git\objects\c3\04d52b0801a7f7516ad62a93477fa863998390" />
+    <None Include=".git\objects\c4\94f95579cc168dd97ad1bb7c71fd5a6044f863" />
+    <None Include=".git\objects\ca\2229388cb7919d785103017c615083df598ec9" />
+    <None Include=".git\objects\ce\47da716ef354253f6ca0606162404262b63eb3" />
+    <None Include=".git\objects\d0\196826f86c38dafa488f9f4d7a31d35bc21cc9" />
+    <None Include=".git\objects\d3\7c6e743d314e62caf4a245733fa8495cad8d35" />
+    <None Include=".git\objects\d4\69d13705fdefa720688024941db09d67b523ad" />
+    <None Include=".git\objects\d4\b9b0c05e9ff524e31508e783a78bd231af6b2a" />
+    <None Include=".git\objects\d5\8b33f9b9eb03dcd17e4437d5f9142255bbbc5b" />
+    <None Include=".git\objects\d5\a8cc6793da9cd4c0e5ad0435b95dd72a88f120" />
+    <None Include=".git\objects\d6\d15512cc2f632c30cbd1bab2f0330666be6dd3" />
+    <None Include=".git\objects\dc\e313780c4cb673d6d1077f36a9c1224d6f4817" />
+    <None Include=".git\objects\de\64f6303efa15d38e17c0e57961f91a7af167f4" />
+    <None Include=".git\objects\df\00fa40cc36f8d9e4943d709fe24dae80d75de8" />
+    <None Include=".git\objects\e0\9af9fc476df8f3e81ac829d620c20e66039156" />
+    <None Include=".git\objects\e1\44e7a291c49cfae86a6bf4fa6626520b4fa2f3" />
+    <None Include=".git\objects\e2\de3a4bdb42797c87bd3ae4b1e887c3089f9fd7" />
+    <None Include=".git\objects\e3\9115f690037de77516582a0961e2310cb237ac" />
+    <None Include=".git\objects\e5\c7c95735f2641be5f9000ca4976c8a03ee4fde" />
+    <None Include=".git\objects\e6\ed3bdab1f07e43d32e9cf1e3d10c68523cf81f" />
+    <None Include=".git\objects\e9\e308815667c00160811cb847f02245babe6372" />
+    <None Include=".git\objects\ea\3a9931c0893f617fb817752d9b9ec01a000323" />
+    <None Include=".git\objects\ea\3aee2ba53e7071a94f827a99257428a52a0c8f" />
+    <None Include=".git\objects\eb\7d61e14b8aea28e00d041661318a3119625a96" />
+    <None Include=".git\objects\ef\372218cbef656dfbd37f7eaeb52c404c64edce" />
+    <None Include=".git\objects\f0\bf341ed680f06b7af4323ad75ae3208570a95f" />
+    <None Include=".git\objects\f1\2524b221614c3b9a654fbf95275a994fdaf2ab" />
+    <None Include=".git\objects\f3\18f7e6a6b22c7ce7ab0a95b2c48812db1c80fb" />
+    <None Include=".git\objects\f4\1dc907cb5add44e67f959f479341267be02f0d" />
+    <None Include=".git\objects\f6\55a34d4e5d261b82a5b5118454735264793f2d" />
+    <None Include=".git\objects\f7\5158a3027a48a78c2c3a251d83691176e1e24c" />
+    <None Include=".git\objects\f8\1158a53a94239b190c817fc3b48986db9a1447" />
+    <None Include=".git\objects\f8\af4f5a5dff044ba3e8c417a74085a2a600a163" />
+    <None Include=".git\objects\f9\5dae69f4319967b2f7379ecabde59d117e42d8" />
+    <None Include=".git\objects\fb\96e3f57327f0604b7f74cfef3850c9ed4ad173" />
+    <None Include=".git\objects\fd\7df5690b386a9dbeb979f156344231d847378c" />
+    <None Include=".git\ORIG_HEAD" />
+    <None Include=".git\refs\heads\master" />
+    <None Include=".git\refs\remotes\origin\master" />
+    <None Include=".git\refs\tags\0.1" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data.cs" />
@@ -118,91 +250,24 @@
     <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScreenCapture.cs" />
-    <Compile Include="Vision.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include=".git\ms-persist.xml" />
     <Content Include="License-LGPL.txt" />
-    <EmbeddedResource Include="Properties\p1_answer.png" />
-    <EmbeddedResource Include="Properties\p1_axl.png" />
-    <EmbeddedResource Include="Properties\p1_baiken.png" />
-    <EmbeddedResource Include="Properties\p1_bedman.png" />
-    <EmbeddedResource Include="Properties\p1_chipp.png" />
-    <EmbeddedResource Include="Properties\p1_dizzy.png" />
-    <EmbeddedResource Include="Properties\p1_faust.png" />
-    <EmbeddedResource Include="Properties\p1_ino.png" />
-    <EmbeddedResource Include="Properties\p1_jacko.png" />
-    <EmbeddedResource Include="Properties\p1_johnny.png" />
-    <EmbeddedResource Include="Properties\p1_leo.png" />
-    <EmbeddedResource Include="Properties\p1_may.png" />
-    <EmbeddedResource Include="Properties\p1_potemkin.png" />
-    <EmbeddedResource Include="Properties\p1_sin.png" />
-    <EmbeddedResource Include="Properties\p1_slayer.png" />
-    <EmbeddedResource Include="Properties\p1_venom.png" />
-    <EmbeddedResource Include="Properties\p1_zato.png" />
-    <EmbeddedResource Include="Properties\p2_answer.png" />
-    <EmbeddedResource Include="Properties\p2_axl.png" />
-    <EmbeddedResource Include="Properties\p2_baiken.png" />
-    <EmbeddedResource Include="Properties\p2_bedman.png" />
-    <EmbeddedResource Include="Properties\p2_chipp.png" />
-    <EmbeddedResource Include="Properties\p2_dizzy.png" />
-    <EmbeddedResource Include="Properties\p2_faust.png" />
-    <EmbeddedResource Include="Properties\p2_ino.png" />
-    <EmbeddedResource Include="Properties\p2_jacko.png" />
-    <EmbeddedResource Include="Properties\p2_johnny.png" />
-    <EmbeddedResource Include="Properties\p2_leo.png" />
-    <EmbeddedResource Include="Properties\p2_may.png" />
-    <EmbeddedResource Include="Properties\p2_potemkin.png" />
-    <EmbeddedResource Include="Properties\p2_sin.png" />
-    <EmbeddedResource Include="Properties\p2_slayer.png" />
-    <EmbeddedResource Include="Properties\p2_venom.png" />
-    <EmbeddedResource Include="Properties\p2_zato.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="assets\" />
+    <Folder Include=".git\objects\info\" />
+    <Folder Include=".git\objects\pack\" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\p1_elphelt.png" />
-    <EmbeddedResource Include="Properties\p1_jam.png" />
-    <EmbeddedResource Include="Properties\p1_kum.png" />
-    <EmbeddedResource Include="Properties\p1_ky.png" />
-    <EmbeddedResource Include="Properties\p1_millia.png" />
-    <EmbeddedResource Include="Properties\p1_ramlethal.png" />
-    <EmbeddedResource Include="Properties\p1_raven.png" />
-    <EmbeddedResource Include="Properties\p1_sol.png" />
-    <EmbeddedResource Include="Properties\p2_elphelt.png" />
-    <EmbeddedResource Include="Properties\p2_jam.png" />
-    <EmbeddedResource Include="Properties\p2_kum.png" />
-    <EmbeddedResource Include="Properties\p2_ky.png" />
-    <EmbeddedResource Include="Properties\p2_millia.png" />
-    <EmbeddedResource Include="Properties\p2_ramlethal.png" />
-    <EmbeddedResource Include="Properties\p2_raven.png" />
-    <EmbeddedResource Include="Properties\p2_sol.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets" Condition="Exists('..\packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+  <Import Project="packages\System.Data.SQLite.Core.1.0.112.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('packages\System.Data.SQLite.Core.1.0.112.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EMGU.CV.3.4.3.3016\build\EMGU.CV.targets'))" />
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('packages\System.Data.SQLite.Core.1.0.112.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\System.Data.SQLite.Core.1.0.112.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.110.0\build\net451\System.Data.SQLite.Core.targets')" />
 </Project>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGStat", "GGStat.csproj", "{F90EACA5-4715-45D4-8AB8-FD88257ACC55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Debug|x64.ActiveCfg = Debug|x64
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Debug|x64.Build.0 = Debug|x64
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Debug|x86.ActiveCfg = Debug|x86
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Debug|x86.Build.0 = Debug|x86
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Release|x64.ActiveCfg = Release|x64
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Release|x64.Build.0 = Release|x64
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Release|x86.ActiveCfg = Release|x86
+		{F90EACA5-4715-45D4-8AB8-FD88257ACC55}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CD499CB-FE64-4D21-9301-EACF63923652}
+	EndGlobalSection
+EndGlobal

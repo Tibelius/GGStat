@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Net.Http;
 
 namespace GGStat
 {
@@ -12,6 +10,9 @@ namespace GGStat
         public static Process process;
         public static string PROCESS_NAME = "GuiltyGearXrd";
 
+        private static readonly HttpClient client = new HttpClient();
+        private static string STEAM_API_KEY = "1D514CA9A5AE546E2E0C63D63A83B7C3"; //pls no abuse
+        private static string STEAM_ID = "76561197993307624"; // Owner steam ID for matching Steam name to GG game name
         static void Main(string[] args) {
             string[] all = System.Reflection.Assembly.GetEntryAssembly().
                 GetManifestResourceNames();
@@ -21,20 +22,33 @@ namespace GGStat
 
 
             Data.initDB();
-            Process[] processes = new Process[] { };
-            while (processes.Length == 0) {
-                processes = Process.GetProcessesByName(PROCESS_NAME);
+            process = getProcess();
+            while (!isConnected())
+            {
                 Console.WriteLine("Finding GuiltyGearXrd process...");
-                System.Threading.Thread.Sleep(2000);
+                System.Threading.Thread.Sleep(1000);
             }
-            process = processes[0];
-            Game game = new Game();
             Console.Clear();
-            game.Run();
+            do
+            {
+                Game game = new Game();
+                game.Run();
+            } while (true);
         }
-    }
 
-    internal class Form1 : Form
-    {
+        private static Process getProcess()
+        {
+            Process[] processes = Process.GetProcessesByName(PROCESS_NAME);
+            if (processes.Length > 0)
+            {
+                return processes[0];
+            } else { return null; }
+        }
+
+        public static bool isConnected()
+        {
+            Process[] processes = Process.GetProcessesByName(PROCESS_NAME);
+            return processes.Length != 0;
+        }
     }
 }

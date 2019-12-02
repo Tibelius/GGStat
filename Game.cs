@@ -7,37 +7,35 @@ using System.Threading;
 namespace GGStat
 {
     class Game {
+
         public static string[] Character = new string[]
         {
-            "unknown",
-            "sol",
-            "ky",
-            "millia",
-            "zato",
-            "may",
-            "potemkin",
-            "chipp",
-            "venom",
-            "axl",
-            "ino",
-            "faust",
-            "slayer",
-            "ramlethal",
-            "bedman",
-            "sin",
-            "elphelt",
-            "leo",
-            "johnny",
-            "jacko",
-            "jam",
-            "raven",
-            "kum",
-            "dizzy",
-            "baiken",
-            "answer"
+            "Sol", // 0
+            "Ky", // 1
+            "May", // 2
+            "Millia", // 3
+            "Zato=1", // 4
+            "Potemkin", // 5
+            "Chipp", // 6
+            "Faust", // 7
+            "Axl", // 8
+            "Venom", // 9
+            "Slayer", // 10
+            "Ino", // 11
+            "Bedman", // 12
+            "Ramlethal", // 13
+            "Sin", // 14
+            "Elphelt", // 15
+            "Leo", // 16
+            "Johnny", // 17
+            "Jack-O", // 18
+            "Jam", // 19
+            "Kum", // 20
+            "Raven", // 21
+            "Dizzy", // 22
+            "Baiken", // 23
+            "Answer" // 24
         };
-
-        private int[] playerCharacters = new int[2] { 0, 0 };
 
         private const string PROCESS_NAME = "GuiltyGearXrd";
 
@@ -48,18 +46,7 @@ namespace GGStat
         public static extern bool ReadProcessMemory(int hProcess,
         Int64 lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
-        public Dictionary<string, int> valueList = new Dictionary<string, int> {
-            {"gameState", 4},
-            {"timer", 99},
-            {"player1Rounds", 0},
-            {"player2Rounds", 0},
-            {"player1HP", 420},
-            {"player2HP", 420},
-        };
-
-        private Vision vision;
         private Memory memory;
-        private Thread characterScanThread;
 
         public Dictionary<GameState, bool> gamestate = new Dictionary<GameState, bool> {
             { GameState.Loading, false },
@@ -78,20 +65,83 @@ namespace GGStat
         }
 
         public Game() {
-            vision = new Vision(Program.process.MainWindowHandle);
             memory = new Memory();
         }
 
         public class Player
         {
-            public string name;
-            public int character;
-            public int number;
+            public long steamId { get; set; }
+            public string name { get; set; }
+            public int character { get; set; }
+            public int matchesWon { get; set; }
+            public int matchesSum { get; set; }
+            public int loadingPct { get; set; }
+            public int cabId { get; set; }
+            public int seatId { get; set; }
 
-            public Player(string name, int character, int number) {
+            public Player(long steamId, string name, int character, int matchesWon, int matchesSum, int loadingPct, int cabId, int seatId)
+            {
+                this.steamId = steamId;
                 this.name = name;
                 this.character = character;
-                this.number = number;
+                this.matchesWon = matchesWon;
+                this.matchesSum = matchesSum;
+                this.loadingPct = loadingPct;
+                this.cabId = cabId;
+                this.seatId = seatId;
+            }
+
+            public bool isValid() { return steamId > 0; }
+
+            public string toString()
+            {
+                return "steamId: " + steamId + 
+                    ", name: " + name + 
+                    ", character: " + Character[character] + 
+                    ", matchesWon: " + matchesWon + 
+                    ", matchesSum: " + matchesSum + 
+                    ", loadingPct: " + loadingPct +
+                    ", cabId: " + cabId + 
+                    ", seatId: " + seatId;
+            }
+        }
+
+        public class MatchState
+        {
+            public int timer { get; set; }
+            public int[] health { get; set; }
+            public int[] rounds { get; set; }
+            public int[] tension { get; set; }
+            public bool[] hasBurst { get; set; }
+            public int[] risc { get; set; }
+            public int[] stun { get; set; }
+            public int state { get; set; }
+
+            public MatchState(){ }
+            public MatchState(int timer, int[] health, int[] rounds, int[] tension, bool[] hasBurst, int[] risc, int[] stun, int state)
+            {
+                this.timer = timer;
+                this.health = health;
+                this.rounds = rounds;
+                this.tension = tension;
+                this.hasBurst = hasBurst;
+                this.risc = risc;
+                this.stun = stun;
+                this.state = state; 
+            }
+            public bool isValid() { return timer > 0; }
+            public string toString()
+            {
+                if (!isValid()) return "MatchState Not Valid";
+
+                return "timer: " + timer +
+                    ", health_1: " + health[0] + ", health_2: " + health[1] +
+                    ", rounds_1: " + rounds[0] + ", rounds_2: " + rounds[1] +
+                    ", tension_1: " + tension[0] + ", tension_2: " + tension[1] +
+                    ", hasBurst_1: " + hasBurst[0] + ", hasBurst_2: " + hasBurst[1] +
+                    ", risc_1: " + risc[0] + ", risc_2: " + risc[1] +
+                    ", stun_1: " + stun[0] + ", stun_2: " + stun[1] +
+                    ", state: " + state;
             }
         }
 
@@ -118,7 +168,8 @@ namespace GGStat
             public Match() {
             }
 
-            public Match(Player player1, Player player2) {
+            public Match(Player player1, Player player2)
+            {
                 this.player1 = player1;
                 this.player2 = player2;
             }
@@ -160,123 +211,184 @@ namespace GGStat
             }
         }
 
-        private int lastTimerValue = 99;
-
         Match match = null;
-
         Player p1;
         Player p2;
+        Player client;
 
-        public void Run() {
-            Thread.Sleep(1000);
-            memory.ScanMemory(ref valueList);
-            lastTimerValue = valueList["timer"];
-            Thread.Sleep(1000);
-            do {
-                Thread.Sleep(1000);
-                //Console.Clear();
-                memory.ScanMemory(ref valueList);
-                
-                foreach (KeyValuePair<string, int> item in valueList) {
-                    Console.WriteLine(item.Key + ":" + item.Value);
+        public void Run()
+        {
+            List<Player> playerList = memory.getPlayerData();
+            MatchState state = null;
+            Console.WriteLine("Waiting...");
+            do
+            {
+
+                int validPlayers = 0;
+                do {
+                    validPlayers = 0;
+                    playerList = memory.getPlayerData();
+                    foreach (Player player in playerList)
+                    {
+                        if (player.isValid()) { validPlayers++; }
+                    }
+                    Console.Write(".");
+                    System.Threading.Thread.Sleep(100);
+                } while (validPlayers < 2);
+
+                // Find client from player list.
+                foreach (Player player in playerList)
+                {
+                    if (player.steamId == memory.getClientSteamId())
+                    {
+                        client = player;
+                        break;
+                    }
                 }
 
-                if (lastTimerValue != valueList["timer"]) {
-                    gamestate[GameState.MatchInProgress] = true;
-                    gamestate[GameState.RoundInProgress] = true;
-                } else {
-                    Console.WriteLine("Match not in progress or game is paused");
-                    gamestate[GameState.RoundInProgress] = false;
-
-                    if (match != null) {
-                        int round = valueList["player1Rounds"] + valueList["player2Rounds"];
-                        if (round > 0 && match.rounds.Count < round && (valueList["gameState"] == 0 || valueList["gameState"] == 1)) {
-                            var winner = (valueList["gameState"] == 0) ? p1 : p2;
-                            var loser = (valueList["gameState"] == 0) ? p1 : p2;
-                            match.AddRound(round, new Round(round,
-                                    (valueList["gameState"] == 0) ? p1 : p2,
-                                    (valueList["gameState"] == 0) ? p2 : p1,
-                                    valueList["timer"],
-                                    valueList["player1HP"], 
-                                    valueList["player2HP"])
-                                    );
-                        } else if (valueList["player1Rounds"] == 2 || valueList["player2Rounds"] == 2) {
-                            // GAME OVER
-                            Console.WriteLine("-------------------------------------------");
-                            Console.WriteLine(string.Format("Match over! Winner: {0}({1})", match.Winner.name, Character[match.Winner.character]));
-                            foreach (var r in match.rounds) {
-                                if (r != null) {
-                                    Console.WriteLine(r);
-                                }
+                state = memory.getMatchState();
+                // Lets find all players on the same cab as the client, including spectators.
+                foreach (Player player in playerList)
+                {
+                    if (client.cabId == player.cabId)
+                    {
+                        if (p1 != null && p2 != null) break;
+                        if (player.isValid()) {
+                            if (player.seatId == 0)
+                            {
+                                p1 = player;
+                                continue;
                             }
-
-                            Data.saveMatch(match);
-                            Console.WriteLine("Match saved");
-                            match = null;
+                            else if (player.seatId == 1)
+                            {
+                                p2 = player;
+                                continue;
+                            }
                         }
                     }
+                }
+
+                if (p1 == null || !p1.isValid() || p2 == null || !p2.isValid())
+                {
+                    // players are not valid...
                     continue;
                 }
+                Console.WriteLine(".");
 
-                Console.WriteLine(match);
-                if (!gamestate[GameState.MatchInProgress] && valueList["timer"] == 0 && valueList["gameState"] == 4) {
-                    Console.WriteLine("We are not in game at the moment...");
-                    gamestate[GameState.MatchInProgress] = false;
-                    gamestate[GameState.RoundInProgress] = false;
-                    continue;
-                } else
-                // if the current round was won by a player, if the player HPs are reseted
-                // and if either of the player round wins is 2, the match has with no doubt ended
-                if (!gamestate[GameState.MatchInProgress] && (valueList["gameState"] == 0 || valueList["gameState"] == 1) &&
-                    valueList["player1HP"] == 420 && valueList["player2HP"] == 420 &&
-                    (valueList["player1Rounds"] == 2 || valueList["player2Rounds"] == 2)) {
-                    Console.WriteLine("We are not in game at the moment...");
-                    // if the match is not in progress, neither is the round
-                    gamestate[GameState.MatchInProgress] = false;
-                    gamestate[GameState.RoundInProgress] = false;
+                // Wait until we recognize a running match
+                state = memory.getMatchState();
+            } while (!state.isValid());
 
-                    continue;
+            // MATCH START!
+            if (state.rounds[0] == 0 && state.rounds[1] == 0 && state.timer >= 98 && state.health[0] == 420 && state.health[1] == 420)
+            {
+                Console.WriteLine("New Match starting!");
+                Console.WriteLine("Player 1: " + p1.toString());
+                Console.WriteLine("Player 2: " + p2.toString());
+                match = new Match(p1, p2);
+            } else
+            {
+                // the match was most likely already going on when joining to spectate? lets break out of this.
+                Console.Clear();
+                Console.WriteLine("Match was already running when joining to spectate, or Match not ready for tracking yet.");
+                System.Threading.Thread.Sleep(500);
+                return;
+            }
+
+            // MATCH IS RUNNING HERE
+            do
+            {
+                Console.Clear();
+                Console.WriteLine(state.toString());
+                // ROUND END!
+                int round = state.rounds[0] + state.rounds[1];
+                if (round > 0 && match.rounds.Count < round && (state.state == 0 || state.state == 1))
+                {
+                    var winner = (state.state == 0) ? p1 : p2;
+                    var loser = (state.state == 1) ? p1 : p2;
+                    match.AddRound(round, new Round(round,
+                            winner,
+                            loser,
+                            state.timer,
+                            state.health[0],
+                            state.health[1])
+                            );
                 }
-                // if the round is not won by anyone yet and healths are at maximum and both
-                // players have 0 round wins, the match has just started
-                else if (valueList["gameState"] == 4 &&
-                    valueList["player1HP"] == 420 && valueList["player2HP"] == 420 &&
-                    valueList["player1Rounds"] == 0 && valueList["player2Rounds"] == 0) {
-                    gamestate[GameState.MatchInProgress] = true;
-                }
-
-                if (gamestate[GameState.MatchInProgress] && match == null && p1 != null && p2 != null) {
-                    match = new Match(p1, p2);
-                }
-
-                Console.WriteLine("MatchInProgress: " + gamestate[GameState.MatchInProgress]);
-                Console.WriteLine("RoundInProgress: " + gamestate[GameState.RoundInProgress]);
-
-
-                // So if the match is in progress and timer is at 99
-                // Start scan threads when match starts
-                if (gamestate[GameState.MatchInProgress]) {
-                    if (playerCharacters[0] == 0 && playerCharacters[1] == 0 && characterScanThread == null) {
-                        Console.WriteLine("start Character Scan Thread ");
-                        characterScanThread = new Thread(() => CharacterThreadLoop());
-                        characterScanThread.Start();
+                else if (state.rounds[0] == 2 || state.rounds[1] == 2)
+                {
+                    // GAME OVER
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine(string.Format("Match over! Winner: {0}({1})", match.Winner.name, Character[match.Winner.character]));
+                    foreach (var r in match.rounds)
+                    {
+                        if (r != null)
+                        {
+                            Console.WriteLine(r);
+                        }
                     }
-                }
-                lastTimerValue = valueList["timer"];
-            } while (true);
-        }
-        
 
-        public void CharacterThreadLoop() {
-            bool done = false;
-            do {
-                done = vision.FindPlayers(ref playerCharacters);
-                if (done) { 
-                    p1 = new Player("Player1", playerCharacters[0], 0);
-                    p2 = new Player("Player2", playerCharacters[1], 1);
+                    Data.saveMatch(match);
+                    Console.WriteLine("Match saved");
+                    match = null;
                 }
-                Thread.Sleep(2000);
-            } while (!done);
+
+                state = memory.getMatchState();
+                System.Threading.Thread.Sleep(1000);
+            } while (match != null && state.isValid());
+
+            /*
+            Console.WriteLine(match);
+            if (!gamestate[GameState.MatchInProgress] && valueList["timer"] == 0 && valueList["gameState"] == 4)
+            {
+                Console.WriteLine("We are not in game at the moment...");
+                gamestate[GameState.MatchInProgress] = false;
+                gamestate[GameState.RoundInProgress] = false;
+                continue;
+            }
+            else
+            // if the current round was won by a player, if the player HPs are reseted
+            // and if either of the player round wins is 2, the match has with no doubt ended
+            if (!gamestate[GameState.MatchInProgress] && (valueList["gameState"] == 0 || valueList["gameState"] == 1) &&
+                valueList["player1HP"] == 420 && valueList["player2HP"] == 420 &&
+                (valueList["player1Rounds"] == 2 || valueList["player2Rounds"] == 2))
+            {
+                Console.WriteLine("We are not in game at the moment...");
+                // if the match is not in progress, neither is the round
+                gamestate[GameState.MatchInProgress] = false;
+                gamestate[GameState.RoundInProgress] = false;
+
+                continue;
+            }
+            // if the round is not won by anyone yet and healths are at maximum and both
+            // players have 0 round wins, the match has just started
+            else if (valueList["gameState"] == 4 &&
+                valueList["player1HP"] == 420 && valueList["player2HP"] == 420 &&
+                valueList["player1Rounds"] == 0 && valueList["player2Rounds"] == 0)
+            {
+                gamestate[GameState.MatchInProgress] = true;
+            }
+
+            if (gamestate[GameState.MatchInProgress] && match == null && p1 != null && p2 != null && valueList["ownerPosition"] == 0 || valueList["ownerPosition"] == 1)
+            {
+                match = new Match(p1, p2, valueList["ownerPosition"]);
+            }
+
+            Console.WriteLine("MatchInProgress: " + gamestate[GameState.MatchInProgress]);
+            Console.WriteLine("RoundInProgress: " + gamestate[GameState.RoundInProgress]);
+
+
+            // So if the match is in progress and timer is at 99
+            // Start scan threads when match starts
+            if (gamestate[GameState.MatchInProgress])
+            {
+                if (playerCharacters[0] == 0 && playerCharacters[1] == 0 && characterScanThread == null)
+                {
+                    Console.WriteLine("start Character Scan Thread ");
+                    characterScanThread = new Thread(() => CharacterThreadLoop());
+                    characterScanThread.Start();
+                }
+            }
+            lastTimerValue = valueList["timer"];*/
         }
     }
 }
