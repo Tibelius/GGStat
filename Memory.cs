@@ -8,10 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static GGStat.Game;
 
-namespace GGStat
-{
-    class Memory
-    {
+namespace GGStat {
+    class Memory {
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
@@ -20,7 +18,7 @@ namespace GGStat
         long lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
         private readonly int PROCESS_WM_READ = 0x0010;
-        private int BASEADDRESS = Program.process.MainModule.BaseAddress.ToInt32();
+        private int BASEADDRESS = GameThread.process.MainModule.BaseAddress.ToInt32();
         private IntPtr processHandle;
 
         private readonly int[] gameStateOffsets = { 0x009C0DEC, 0x0 };
@@ -43,7 +41,7 @@ namespace GGStat
         private readonly Dictionary<string, int[]> nameList;
 
         public Memory() {
-            processHandle = OpenProcess(PROCESS_WM_READ, false, Program.process.Id);
+            processHandle = OpenProcess(PROCESS_WM_READ, false, GameThread.process.Id);
             dataList = new Dictionary<string, int[]> {
                 {"gameState", gameStateOffsets},
                 {"timer", timerOffsets},
@@ -73,11 +71,10 @@ namespace GGStat
         }
 
         public List<Player> getPlayerData() {
-            if (!Program.isConnected()) return new List<Player>();
+            if (!GameThread.isConnected()) return new List<Player>();
             long[] offs = { 0x1C25AB4L, 0x44CL };
             List<Player> playerList = new List<Player>();
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 byte[] byteArr = ScanAddress(offs, 0x48);
                 if (byteArr == null) return new List<Player>();
                 long steamId = BitConverter.ToInt64(byteArr, 0);
@@ -135,8 +132,8 @@ namespace GGStat
                 int state = BitConverter.ToInt32(ScanAddress(gameStateOffsets, 4), 0);
                 int[] rounds = new int[] { BitConverter.ToInt32(ScanAddress(p1roundoffset, 4), 0), BitConverter.ToInt32(ScanAddress(p2roundoffset, 4), 0) };
                 return new MatchState(timer, health, rounds, tension, canBurst, risc, stun, state);
-            }  catch (Exception e) {
-                Console.WriteLine(e.Message);
+            } catch (Exception e) {
+                Program.Log(e.Message);
                 return new MatchState();
             }
         }
@@ -157,32 +154,28 @@ namespace GGStat
 
             int nameLength = 40;
             buffer = new byte[nameLength];
-            foreach (KeyValuePair<string, int[]> item in nameList)
-            {
+            foreach (KeyValuePair<string, int[]> item in nameList) {
                 int value = BASEADDRESS;
                 long address;
-                foreach (int offset in item.Value)
-                {
+                foreach (int offset in item.Value) {
                     address = value + offset;
                     ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
                     value = BitConverter.ToInt32(buffer, 0);
                 }
-                //Console.WriteLine(BitConverter.ToString(buffer));
+                //Program.Log(BitConverter.ToString(buffer));
                 string name = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
                 name = string.Join<char>("", name.Where((ch, index) => (index % 2) == 0));
-                //Console.WriteLine(name);
+                //Program.Log(name);
                 playerNameList[item.Key] = name;
             }
 
         }
 
-        public byte[] ScanAddress(long[] offsets, int numBytes)
-        {
+        public byte[] ScanAddress(long[] offsets, int numBytes) {
             int bytesRead = 0;
             byte[] buffer = new byte[numBytes];
             long value = BASEADDRESS;
-            foreach (long offset in offsets)
-            {
+            foreach (long offset in offsets) {
                 long address = value + offset;
                 ReadProcessMemory((int)processHandle, address, buffer, buffer.Length, ref bytesRead);
                 value = BitConverter.ToInt32(buffer, 0);
