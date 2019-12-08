@@ -78,13 +78,16 @@ namespace GGStat {
                 Program.Log(one);
             }
 
-            TestData.RecreateDBFile();
-            TestData.GenerateTestData();
+            if (Program.DEBUG) {
+                TestData.RecreateDBFile();
+                TestData.GenerateTestData();
+            } else {
+                Data.InitDB();
+            }
 
             Program.UI.SetTableData(getAllMatchesWithPlayer(new Player(1)).ToArray());
 
-            //Data.initDB();
-            /*
+            
             process = getProcess();
             while (!isConnected()) {
                 Program.Log("Finding GuiltyGearXrd process...");
@@ -94,7 +97,7 @@ namespace GGStat {
             do {
                 Game game = new Game();
                 game.Run();
-            } while (true);*/
+            } while (true);
         }
 
         private static Process getProcess() {
